@@ -1,0 +1,7 @@
+node_modules*
+
+# Docker Compose
+mysql-data*
+
+# Prisma
+.env
