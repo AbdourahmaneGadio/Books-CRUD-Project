@@ -1,8 +1,5 @@
 FROM node:alpine
 
-RUN echo "hello there"
-
-
 # Install OpenSSL (if needed)
 RUN apk add --no-cache openssl
 
@@ -18,8 +15,7 @@ RUN npm install
 # Copy application files and database directory
 COPY . .
 
-# Generate Prisma client for the database structure
 RUN npx prisma generate
 
-# Add initial data
-CMD ["npx", "prisma", "db", "seed"]
+# Generate Prisma client for the database structure
+CMD ["sh","-c","npx prisma migrate deploy && npx prisma db seed"]
