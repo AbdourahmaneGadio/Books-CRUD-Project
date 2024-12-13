@@ -10,36 +10,39 @@ datasource db {
 model Book {
   id         Int         @id @default(autoincrement())
   createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  updatedAt  DateTime    @default(now()) @updatedAt @db.Timestamp(3)
   title      String      @db.VarChar(255)
-  synopsis   String? // Nullable field for book synopsis
+  synopsis   String?
   authorId   Int
-  price      Float // Changed to Float for more accurate pricing
-  isbn       String      @unique @db.VarChar(17) // Added unique constraint for ISBN
+  price      Float
+  isbn       String      @unique @db.VarChar(17)
   pageNum    Int
   categoryId Int
   author     Author      @relation(fields: [authorId], references: [id])
   category   Category    @relation(fields: [categoryId], references: [id])
-  bookImages BookImage[] // Relation to BookImage model
+  bookImages BookImage[]
+
+  @@index([authorId], map: "Book_authorId_fkey")
+  @@index([categoryId], map: "Book_categoryId_fkey")
 }
 
 model Author {
   id    Int    @id @default(autoincrement())
-  name  String @unique // Removed nullable type; author names should be required
-  books Book[] // Changed to plural for consistency with the Book model
+  name  String @unique
+  books Book[]
 }
 
 model Category {
   id    Int    @id @default(autoincrement())
-  name  String @unique // Removed nullable type; category names should be required
-  books Book[] // Changed to plural for consistency with the Book model
+  name  String @unique
+  books Book[]
 }
 
 model Image {
   id        Int         @id @default(autoincrement())
-  filename  String      @db.VarChar(255) // Renamed field to be more descriptive
-  url       String? // Nullable field for storing image URL
-  alt       String? // Nullable field for alternative text for images
+  filename  String      @db.VarChar(255)
+  url       String?
+  alt       String?
   BookImage BookImage[]
 }
 
@@ -47,9 +50,11 @@ model BookImage {
   id      Int    @id @default(autoincrement())
   bookId  Int
   imageId Int
-  type    String // Type of image (e.g., COVER, ILLUSTRATION)
-  order   Int // Order of the image in relation to others
+  type    String
+  order   Int
+  book    Book   @relation(fields: [bookId], references: [id])
+  image   Image  @relation(fields: [imageId], references: [id])
 
-  book  Book  @relation(fields: [bookId], references: [id])
-  image Image @relation(fields: [imageId], references: [id])
+  @@index([bookId], map: "BookImage_bookId_fkey")
+  @@index([imageId], map: "BookImage_imageId_fkey")
 }
