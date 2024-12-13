@@ -32,7 +32,9 @@ services:
       PMA_HOST: ${MYSQL_DATABASE_HOST}  # Corrected PMA_HOST to match the service name
       PMA_USER: ${MYSQL_NORMAL_USERNAME}
       PMA_PASSWORD: ${MYSQL_NORMAL_PASSWORD}
-
+    depends_on:
+      database:
+        condition: service_healthy
 
   prisma:
     build:
