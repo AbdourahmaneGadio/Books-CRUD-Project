@@ -67,7 +67,7 @@ server.post("/books/create", (req, res) => {
     const {pageNum} = req.body;
     const {categoryId} = req.body;
 
-    let sql = "INSERT INTO Books (title, synopsis, authorId, price, isbn, pageNum, categoryId) VALUES (?,?,?,?,?,?,?)"
+    let sql = "INSERT INTO Book (title, synopsis, authorId, price, isbn, pageNum, categoryId) VALUES (?,?,?,?,?,?,?)"
     db.query(sql, [title, synopsis, authorId, price, isbn, pageNum, categoryId], (err, result) => {
         if (err) {
             console.log(err);
@@ -110,7 +110,7 @@ server.post("/books/create", (req, res) => {
  *                   type: string
  */
 server.get("/books", (req, res) => {
-    let sql = "SELECT * FROM Books";
+    let sql = "SELECT * FROM Book";
     db.query(sql, (err, result) => {
         if (err) {
             console.log(err);
@@ -174,7 +174,7 @@ server.put("/books/edit", (req, res) => {
     const {pageNum} = req.body;
     const {categoryId} = req.body;
 
-    let sql = "UPDATE Books SET title = ?, synopsis = ?, authorId = ?, price = ?, isbn = ?, pageNum = ?, categoryId = ? WHERE id = ?";
+    let sql = "UPDATE Book SET title = ?, synopsis = ?, authorId = ?, price = ?, isbn = ?, pageNum = ?, categoryId = ? WHERE id = ?";
     db.query(sql, [title, synopsis, authorId, price, isbn, pageNum, categoryId, id], (err, result) => {
         if (err) {
             console.log(err);
@@ -222,7 +222,7 @@ server.put("/books/edit", (req, res) => {
 server.delete("/books/delete/:index", (req, res) => {
     const {index} = req.params
 
-    let sql = "DELETE FROM Books WHERE id = ?"
+    let sql = "DELETE FROM Book WHERE id = ?"
     db.query(sql, [index], (err, result) => {
         if (err) {
             console.log(err);
