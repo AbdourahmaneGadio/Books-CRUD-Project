@@ -11,6 +11,11 @@ Membres du projet :
 
 ---
 
+## Aperçu
+
+<img width="865" height="916" alt="Screenshot 2025-09-19 at 10-45-05 Bibliothèque en ligne" src="https://github.com/user-attachments/assets/e2286e27-ce46-4e71-b78c-29dee54a3fb7" />
+
+
 ## Instructions pour tester l’application
 
 ### 1. Pré-requis
