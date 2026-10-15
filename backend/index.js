@@ -319,4 +319,10 @@ server.delete("/categories/delete/:index", (req, res) => {
 //#endregion
 
 
-server.listen(3001, () => console.log("Running in the port 3001"));
+// Only start listening when run directly (e.g. `node index.js`),
+// so the app can be imported in unit tests without opening a port.
+if (require.main === module) {
+  server.listen(3001, () => console.log("Running in the port 3001"));
+}
+
+module.exports = server;
