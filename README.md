@@ -91,6 +91,35 @@ Pour la partie back, il faut aller sur [localhost:3001](http:localhost:3001).
 
 ---
 
+## GitHub Actions
+
+Les workflows se trouvent dans `.github/workflows/` :
+
+- **Unit tests** : à chaque push sur une branche et pull request, installe les dépendances avec `npm ci`, exécute les tests Jest du backend et conserve la couverture pendant 14 jours. MySQL est simulé dans les tests ; aucune base de données ni secret n'est nécessaire.
+- **Docker images** : aux mêmes événements, construit les images `backend`, `frontend` et `prisma-seed`, sans les publier.
+- **Release** : un tag de version comme `v1.0.0` relance les tests, construit et publie les trois images sur GitHub Container Registry (GHCR), puis crée une GitHub Release avec des notes générées automatiquement. Un tag contenant un tiret, comme `v1.0.0-rc.1`, crée une préversion.
+
+Pour déclencher une release après avoir fusionné les changements :
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Les images publiées sont nommées `ghcr.io/<propriétaire>/<dépôt>/backend:v1.0.0`, `ghcr.io/<propriétaire>/<dépôt>/frontend:v1.0.0` et `ghcr.io/<propriétaire>/<dépôt>/prisma-seed:v1.0.0` (propriétaire et dépôt en minuscules). Chaque image reçoit également un tag basé sur le SHA du commit. Les images MySQL et phpMyAdmin proviennent déjà de registres externes et ne sont pas reconstruites.
+
+L'authentification utilise le `GITHUB_TOKEN` fourni automatiquement par GitHub, sans secret supplémentaire. Le dépôt doit autoriser GitHub Actions et la publication de packages GHCR. Les packages GHCR sont privés par défaut ; leur visibilité peut être modifiée dans les paramètres du package.
+
+Pour exécuter les tests localement :
+
+```bash
+cd backend
+npm ci
+npm test -- --ci --runInBand --coverage
+```
+
+---
+
 ## Fonctionnalités
 
 L'application nous permet de se créer une base de données contenant des livres.
